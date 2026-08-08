@@ -39,6 +39,34 @@ export class AdjacencyList {
     return this.adjacency.has(node);
   }
 
+  toJSON(): { type: "AdjacencyList"; adjacency: Record<string, string[]> } {
+    const adjacency: Record<string, string[]> = {};
+    for (const [node, neighbors] of this.adjacency.entries()) {
+      adjacency[node] = Array.from(neighbors);
+    }
+
+    return { type: "AdjacencyList", adjacency };
+  }
+
+  static fromJSON(input?: {
+    type?: string;
+    adjacency?: Record<string, string[]>;
+  }): AdjacencyList {
+    const graph = new AdjacencyList();
+    if (!input?.adjacency) {
+      return graph;
+    }
+
+    for (const [node, neighbors] of Object.entries(input.adjacency)) {
+      graph.addNode(node);
+      for (const neighbor of neighbors) {
+        graph.addEdge(node, neighbor);
+      }
+    }
+
+    return graph;
+  }
+
   /**
    * Returns a new AdjacencyList with every edge reversed.
    * Used for impact analysis: "what depends on this file" is the
