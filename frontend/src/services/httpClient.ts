@@ -1,5 +1,34 @@
 import axios, { AxiosError } from "axios";
 
+function normalizeErrorMessage(message: string): string {
+  const normalized = message.toLowerCase();
+
+  if (
+    normalized.includes("quota") ||
+    normalized.includes("resource_exhausted") ||
+    normalized.includes("429")
+  ) {
+    return "Gemini API quota has been exhausted. Please check your billing or API limits and try again later.";
+  }
+
+  if (
+    normalized.includes("rate limit") ||
+    normalized.includes("too many requests")
+  ) {
+    return "Gemini API rate limit reached. Please wait a moment and try again.";
+  }
+
+  if (
+    normalized.includes("safety") ||
+    normalized.includes("blocked") ||
+    normalized.includes("unsafe content")
+  ) {
+    return "This request was blocked by Gemini safety policies. Please revise the prompt and try again.";
+  }
+
+  return message;
+}
+
 /**
  * Backend base URL is injected via environment variable at build time.
  * Never hardcode a deployed backend URL here.
@@ -36,11 +65,11 @@ httpClient.interceptors.response.use(
     return response;
   },
   (error: AxiosError<{ error?: { message?: string; code?: string } }>) => {
-    const message =
+    const rawMessage =
       error.response?.data?.error?.message ??
       error.message ??
       "Something went wrong while talking to the RepoLens backend.";
 
-    return Promise.reject(new Error(message));
+    return Promise.reject(new Error(normalizeErrorMessage(rawMessage)));
   }
 );

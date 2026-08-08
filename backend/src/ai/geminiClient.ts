@@ -9,6 +9,52 @@ import { AppError } from "../utils/AppError";
  */
 const GEMINI_MODEL = "gemini-3.6-flash";
 
+export function formatGeminiError(err: unknown): string {
+  const message =
+    err instanceof Error
+      ? err.message
+      : typeof err === "object" && err !== null && "message" in err
+        ? String((err as { message?: unknown }).message ?? "")
+        : "";
+
+  const normalizedMessage = message.toLowerCase();
+  const status =
+    typeof err === "object" && err !== null && "status" in err
+      ? String((err as { status?: unknown }).status ?? "")
+      : "";
+  const code =
+    typeof err === "object" && err !== null && "code" in err
+      ? String((err as { code?: unknown }).code ?? "")
+      : "";
+
+  if (
+    normalizedMessage.includes("quota") ||
+    normalizedMessage.includes("resource_exhausted") ||
+    status.toUpperCase().includes("RESOURCE_EXHAUSTED") ||
+    code === "429"
+  ) {
+    return "Gemini API quota has been exhausted. Please check your plan, billing, or API limits and try again later.";
+  }
+
+  if (
+    normalizedMessage.includes("rate limit") ||
+    normalizedMessage.includes("too many requests") ||
+    normalizedMessage.includes("429")
+  ) {
+    return "Gemini API rate limit reached. Please wait a moment and try again.";
+  }
+
+  if (
+    normalizedMessage.includes("safety") ||
+    normalizedMessage.includes("blocked") ||
+    normalizedMessage.includes("unsafe content")
+  ) {
+    return "Gemini blocked this request because of content safety policy. Please revise your prompt and try again.";
+  }
+
+  return "Gemini API request failed. Please try again in a moment.";
+}
+
 let client: GoogleGenAI | null = null;
 
 function getClient(): GoogleGenAI {
@@ -58,11 +104,11 @@ export async function generateStructuredContent<T>(
     });
     responseText = response.text;
   } catch (err) {
-    throw new AppError(
-      `Gemini request failed: ${err instanceof Error ? err.message : "unknown error"}`,
-      "AI_REQUEST_FAILED",
-      502
-    );
+    const message = formatGeminiError(err);
+    const statusCode =
+      message.includes("quota") || message.includes("rate limit") ? 429 : 502;
+
+    throw new AppError(message, "AI_REQUEST_FAILED", statusCode);
   }
 
   if (!responseText) {
