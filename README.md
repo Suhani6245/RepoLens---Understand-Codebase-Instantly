@@ -98,11 +98,11 @@ Never commit a real `.env` file — only the `.env.example` templates are tracke
 
 ## Screenshots
 
-> _Add screenshots here once deployed:_
-> - `docs/screenshots/landing.png` — Landing page
-> - `docs/screenshots/overview.png` — Repository overview + folder explorer
-> - `docs/screenshots/graph.png` — Dependency graph with a node selected
-> - `docs/screenshots/ask-ai.png` — Ask AI panel
+
+![Landing Page](https://github.com/Suhani6245/RepoLens---Understand-Codebase-Instantly/blob/main/docs/screenshots/landing.png)
+![Overview Page](https://github.com/Suhani6245/RepoLens---Understand-Codebase-Instantly/blob/main/docs/screenshots/overview.png)
+![Dependency Graph Page](https://github.com/Suhani6245/RepoLens---Understand-Codebase-Instantly/blob/main/docs/screenshots/graph.png)
+![Ask-AI Page](https://github.com/Suhani6245/RepoLens---Understand-Codebase-Instantly/blob/main/docs/screenshots/ask-ai.png)
 
 ---
 
