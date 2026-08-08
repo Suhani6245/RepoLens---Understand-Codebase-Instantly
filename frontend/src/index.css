@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-text-primary;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    @apply bg-accent-500/30 text-text-primary;
+  }
+
+  /* Slim, unobtrusive scrollbars for the explorer / panels */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-border-subtle;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-background-surface border border-border rounded-xl shadow-card;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-accent-500 px-4 py-2.5
+      font-medium text-white transition-all duration-150
+      hover:bg-accent-600 active:scale-[0.98]
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-border
+      bg-background-elevated px-4 py-2.5 font-medium text-text-primary transition-all duration-150
+      hover:border-accent-700 hover:bg-background-elevated/80 active:scale-[0.98];
+  }
+}

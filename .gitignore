@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+/dist/
+**/dist/
+/frontend/dist/
+/backend/dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary / local data
+/tmp/
+**/tmp/
+.cloned-repos/
+
+# Coverage / test output
+coverage/
+
+# Optional: package manager lockfiles (keep if you want them tracked)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Render / deployment artifacts
+.render/
+
+# Local runtime data
+backend/.cache/
+frontend/.cache/
